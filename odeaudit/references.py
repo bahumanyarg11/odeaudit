@@ -83,9 +83,13 @@ def _consensus(p: Problem, times: list[float]) -> tuple[list[list[float]], float
     if not radau.success:
         raise RuntimeError(f"Radau reference failed for {p.name}: {radau.message}")
     vals = radau.y.T
+    diff = None
     if bdf.success and bdf.y.shape == radau.y.shape:
         denom = np.maximum(np.abs(vals), 1e-6 * p.scale)
-        unc = float(np.max(np.abs(vals - bdf.y.T) / denom))
+        diff = np.abs(vals - bdf.y.T) / denom
+        diff = diff[np.isfinite(diff)]
+    if diff is not None and diff.size:
+        unc = float(diff.max())
         note = "Radau rtol=1e-12; uncertainty = max relative disagreement with BDF rtol=1e-12"
     else:
         unc = 1e-8

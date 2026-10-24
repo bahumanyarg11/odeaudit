@@ -12,10 +12,11 @@ Seagate (`specaudit/.venv`: `uv pip install diffrax torchdiffeq` into it, then r
 - [x] Mixed-norm error ÷ rtol metric, verdicts, incremental results.json with resume, Markdown report, CLI, 7 tests
 
 ## Queue
-1. [ ] Stiff-set run (scipy + odeint, 20 s budget) → REPORT.md; triage silent failures vs expected explicit-method timeouts
+1. [x] Stiff-set run (scipy + odeint, 20 s budget) → REPORT.md; headlines in README
 2. [ ] diffrax + torchdiffeq runs once the Seagate drive is back
-3. [ ] README headline findings; publish (user's account, no AI attribution); upstream issues only after hand verification
+3. [x] README headline findings; published at github.com/bahumanyarg11/odeaudit. Upstream (SciPy) only after hand verification of BDF/VDPOL and a check against SciPy's own benchmarks
 4. [ ] Later: Pollution (20-dim) and Ring Modulator from the Bari test set; float32 runs for torchdiffeq/diffrax
 
 ## Log
 - 2026-10-24 built; DETEST run with SciPy/odeint completed (see results/).
+- E5 excluded: Radau rtol 1e-12 cannot complete it (step underflow); kept as E5_PROBLEM for anyone with a reference. 567 SciPy/odeint cases in results/.

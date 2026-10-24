@@ -107,7 +107,7 @@ def run_audit(
     results_path = out_dir / "results.json"
     cases: list[Case] = []
     if resume and results_path.exists():
-        cases = [Case(**c) for c in json.loads(results_path.read_text())["cases"]]
+        cases = [Case(**c) for c in json.loads(results_path.read_text())["cases"] if c["status"] != "crashed"]
     done = {(c.problem, c.solver, c.rtol) for c in cases}
     meta = {
         "odeaudit": __version__,

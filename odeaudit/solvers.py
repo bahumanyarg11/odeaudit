@@ -41,12 +41,14 @@ def _scipy(method: str) -> Callable:
         t0 = time.perf_counter()
         sol = solve_ivp(f, p.t_span, np.asarray(p.y0, float), method=method, rtol=rtol, atol=atol, t_eval=times, **kw)
         dt = time.perf_counter() - t0
+        # On early failure solve_ivp returns empty lists for t and y.
+        y = np.asarray(sol.y, float)
         return Run(
             f"scipy.{method}",
             bool(sol.success),
-            sol.y.T.tolist() if sol.success else [],
+            y.T.tolist() if sol.success and y.ndim == 2 else [],
             int(sol.nfev),
-            int(sol.t.size),
+            int(len(sol.t)),
             dt,
             str(sol.message),
         )

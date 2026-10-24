@@ -37,6 +37,21 @@ run_audit(["ROBER", "HIRES"], ["scipy"], rtols=(1e-6,), timeout=30, out_dir="out
 See [REPORT.md](REPORT.md) for every problem × solver × tolerance on this machine.
 
 <!-- HEADLINES -->
+### Headline findings (SciPy 1.17.1 `solve_ivp` + `odeint`, this machine; diffrax/torchdiffeq rows pending)
+
+- **Explicit methods never finish the stiff problems.** RK45, RK23 and DOP853 hit the 20 s budget on ROBER, VDPOL, OREGO and
+  AKZO at every tolerance (RK45 on ROBER at rtol 1e-3 fails outright: "Required step size is less than spacing between numbers").
+  `solve_ivp`'s default method is RK45; nothing warns the user that the problem is stiff.
+- **BDF on Van der Pol (μ = 1000): a silent failure and a hard failure.** At rtol 1e-3 BDF reports success with an answer
+  2200× outside tolerance (1.5 correct digits); at rtol 1e-9 it stops with a step-size underflow. LSODA and `odeint` finish
+  but are 350–770× outside tolerance at every rtol.
+- **HIRES and OREGO: implicit methods deliver 10–200× the requested error** (BDF worst: OREGO at rtol 1e-9, 204×), while
+  Radau stays within 10× everywhere; DOP853 on HIRES is the only explicit run that completes the stiff set.
+- **Non-stiff DETEST (462 runs, no failures):** Radau is essentially exact, DOP853 and RK45 stay near their tolerance
+  (median 2.4× and 4× at rtol 1e-6), RK23, BDF, LSODA and `odeint` run 13–26× loose. On the two-body orbits D1–D5 every
+  solver ends 100–10000× outside tolerance after three revolutions: expected global error growth, see Caveats.
+- E5 (Enright–Hull) is excluded until a trustworthy reference exists: Radau at rtol 1e-12 cannot complete it.
+<!-- /HEADLINES -->
 
 ## Caveats
 
@@ -46,6 +61,10 @@ See [REPORT.md](REPORT.md) for every problem × solver × tolerance on this mach
   not atol choices. E5 and OREGO carry a problem `scale` because their components span many orders.
 - Chemical Akzo Nobel is an index-1 DAE; it is run here as a stiff ODE with the algebraic equation relaxed (ε = 1e-4).
 - Timings are single-process wall clock and include JIT compilation for diffrax.
+- Local error control does not bound *global* error. On the orbit problems D1–D5 (about three revolutions)
+  phase error accumulates and every solver ends up 100–10000× outside its tolerance; that is a property of
+  the problem class, shown here because it is what a user gets, not a defect of any one library. Compare
+  solvers against each other on those rows rather than against the ≤ 10× line.
 
 ## Adding a problem
 

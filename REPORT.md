@@ -309,7 +309,65 @@ t ∈ [0, 1e+11], dim 3, reference: consensus (uncertainty 4e-08)
 
 | solver | rtol 1e-03 | rtol 1e-06 | rtol 1e-09 |
 |---|---|---|---|
-| `scipy.RK45` | 💥 crashed | ⏱ timeout | ⏱ timeout |
+| `scipy.BDF` | ✅ 1.43× (2.2 digits) | ✅ 4.84× (4.9 digits) | ⚠️ 18.7× (5.8 digits) |
+| `scipy.DOP853` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.LSODA` | ✅ 0.783× (0.4 digits) | ✅ 3.58× (3.7 digits) | ✅ 8.78× (5.9 digits) |
+| `scipy.RK23` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.RK45` | 🛑 failed | ⏱ timeout | ⏱ timeout |
+| `scipy.Radau` | ✅ 0.0816× (2.6 digits) | ✅ 0.106× (6.2 digits) | ✅ ≤ref (9.8 digits) |
+| `scipy.odeint` | ✅ 0.783× (0.2 digits) | ✅ 3.58× (2.8 digits) | ⚠️ 10.8× (5.8 digits) |
+
+### VDPOL — Van der Pol, mu = 1000, to t = 3000 (about two periods)
+t ∈ [0, 3000], dim 2, reference: consensus (uncertainty 1e-08)
+
+| solver | rtol 1e-03 | rtol 1e-06 | rtol 1e-09 |
+|---|---|---|---|
+| `scipy.BDF` | ❌ 2.23e+03× (1.5 digits) | ⚠️ 367× (4.4 digits) | 🛑 failed |
+| `scipy.DOP853` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.LSODA` | ⚠️ 392× (1.6 digits) | ⚠️ 351× (4.4 digits) | ⚠️ 768× (7.0 digits) |
+| `scipy.RK23` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.RK45` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.Radau` | ✅ 0.286× (4.3 digits) | ✅ 0.286× (7.8 digits) | ✅ ≤ref (11.7 digits) |
+| `scipy.odeint` | ⚠️ 392× (1.7 digits) | ⚠️ 337× (4.4 digits) | ⚠️ 753× (7.0 digits) |
+
+### HIRES — High irradiance response of photomorphogenesis (Schäfer), 8 species
+t ∈ [0, 321.812], dim 8, reference: consensus (uncertainty 6e-10)
+
+| solver | rtol 1e-03 | rtol 1e-06 | rtol 1e-09 |
+|---|---|---|---|
+| `scipy.BDF` | ⚠️ 55.4× (1.2 digits) | ⚠️ 32.5× (4.4 digits) | ⚠️ 61.6× (7.1 digits) |
+| `scipy.DOP853` | ⚠️ 56.1× (4.0 digits) | ⚠️ 41.2× (7.1 digits) | ⚠️ 19.8× (11.6 digits) |
+| `scipy.LSODA` | ⚠️ 18.8× (1.7 digits) | ⚠️ 11.3× (4.9 digits) | ⚠️ 25.4× (7.5 digits) |
+| `scipy.RK23` | ✅ 4.89× (1.3 digits) | ✅ 6.07× (5.1 digits) | ⚠️ 52.2× (7.2 digits) |
+| `scipy.RK45` | ✅ 1.15× (2.5 digits) | ✅ 0.552× (6.1 digits) | ✅ 0.924× (9.2 digits) |
+| `scipy.Radau` | ✅ 0.116× (4.0 digits) | ✅ 0.111× (7.0 digits) | ✅ ≤ref (10.1 digits) |
+| `scipy.odeint` | ⚠️ 24.8× (1.5 digits) | ⚠️ 23.1× (4.6 digits) | ⚠️ 49.9× (7.2 digits) |
+
+### OREGO — Oregonator (Belousov-Zhabotinsky), one period
+t ∈ [0, 360], dim 3, reference: consensus (uncertainty 1e-09)
+
+| solver | rtol 1e-03 | rtol 1e-06 | rtol 1e-09 |
+|---|---|---|---|
+| `scipy.BDF` | ⚠️ 10.1× (2.0 digits) | ⚠️ 69.7× (4.2 digits) | ⚠️ 204× (6.7 digits) |
+| `scipy.DOP853` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.LSODA` | ⚠️ 39.8× (1.4 digits) | ⚠️ 12.1× (4.9 digits) | ⚠️ 103× (7.0 digits) |
+| `scipy.RK23` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.RK45` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.Radau` | ✅ 0.0608× (4.5 digits) | ✅ 0.0993× (7.3 digits) | ✅ ≤ref (11.0 digits) |
+| `scipy.odeint` | ⚠️ 39.8× (1.4 digits) | ⚠️ 32.8× (4.5 digits) | ⚠️ 145× (6.8 digits) |
+
+### AKZO — Chemical Akzo Nobel (index-1 DAE as stiff ODE, eps = 1e-4)
+t ∈ [0, 180], dim 6, reference: consensus (uncertainty 3e-11)
+
+| solver | rtol 1e-03 | rtol 1e-06 | rtol 1e-09 |
+|---|---|---|---|
+| `scipy.BDF` | ✅ 0.432× (3.3 digits) | ✅ 1.38× (6.2 digits) | ✅ 3.79× (8.6 digits) |
+| `scipy.DOP853` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.LSODA` | ✅ 0.635× (3.4 digits) | ✅ 0.899× (6.0 digits) | ✅ 1.73× (8.7 digits) |
+| `scipy.RK23` | ✅ 3.6× (4.4 digits) | ✅ 3.26× (5.5 digits) | ✅ 4.26× (8.9 digits) |
+| `scipy.RK45` | ⏱ timeout | ⏱ timeout | ⏱ timeout |
+| `scipy.Radau` | ✅ 0.0902× (4.0 digits) | ✅ 0.146× (8.2 digits) | ✅ ≤ref (11.7 digits) |
+| `scipy.odeint` | ✅ 0.635× (3.4 digits) | ✅ 0.998× (5.9 digits) | ✅ 2.55× (8.6 digits) |
 
 ## Silent failures
 
@@ -343,6 +401,7 @@ Solver reported success; the answer is more than 1000× worse than requested.
 | D2 | `scipy.LSODA` | 1e-03 | 3.34e+03 | -0.5 |
 | E3 | `scipy.BDF` | 1e-09 | 3.15e+03 | 5.5 |
 | D3 | `scipy.RK45` | 1e-03 | 2.26e+03 | -0.4 |
+| VDPOL | `scipy.BDF` | 1e-03 | 2.23e+03 | 1.5 |
 | D2 | `scipy.RK45` | 1e-06 | 1.91e+03 | 2.7 |
 | D2 | `scipy.BDF` | 1e-03 | 1.76e+03 | -0.2 |
 | D5 | `scipy.odeint` | 1e-06 | 1.7e+03 | 2.8 |
@@ -370,9 +429,40 @@ Solver reported success; the answer is more than 1000× worse than requested.
 |---|---|---|
 | ROBER | `scipy.RK45` | 1e-06 |
 | ROBER | `scipy.RK45` | 1e-09 |
+| ROBER | `scipy.RK23` | 1e-03 |
+| ROBER | `scipy.RK23` | 1e-06 |
+| ROBER | `scipy.RK23` | 1e-09 |
+| ROBER | `scipy.DOP853` | 1e-03 |
+| ROBER | `scipy.DOP853` | 1e-06 |
+| ROBER | `scipy.DOP853` | 1e-09 |
+| VDPOL | `scipy.RK45` | 1e-03 |
+| VDPOL | `scipy.RK45` | 1e-06 |
+| VDPOL | `scipy.RK45` | 1e-09 |
+| VDPOL | `scipy.RK23` | 1e-03 |
+| VDPOL | `scipy.RK23` | 1e-06 |
+| VDPOL | `scipy.RK23` | 1e-09 |
+| VDPOL | `scipy.DOP853` | 1e-03 |
+| VDPOL | `scipy.DOP853` | 1e-06 |
+| VDPOL | `scipy.DOP853` | 1e-09 |
+| OREGO | `scipy.RK45` | 1e-03 |
+| OREGO | `scipy.RK45` | 1e-06 |
+| OREGO | `scipy.RK45` | 1e-09 |
+| OREGO | `scipy.RK23` | 1e-03 |
+| OREGO | `scipy.RK23` | 1e-06 |
+| OREGO | `scipy.RK23` | 1e-09 |
+| OREGO | `scipy.DOP853` | 1e-03 |
+| OREGO | `scipy.DOP853` | 1e-06 |
+| OREGO | `scipy.DOP853` | 1e-09 |
+| AKZO | `scipy.RK45` | 1e-03 |
+| AKZO | `scipy.RK45` | 1e-06 |
+| AKZO | `scipy.RK45` | 1e-09 |
+| AKZO | `scipy.DOP853` | 1e-03 |
+| AKZO | `scipy.DOP853` | 1e-06 |
+| AKZO | `scipy.DOP853` | 1e-09 |
 
 ## Reported failures / crashes
 
 | problem | solver | rtol | status | message |
 |---|---|---|---|---|
-| ROBER | `scipy.RK45` | 1e-03 | crashed | AttributeError: 'list' object has no attribute 'size' |
+| VDPOL | `scipy.BDF` | 1e-09 | failed | Required step size is less than spacing between numbers. |
+| ROBER | `scipy.RK45` | 1e-03 | failed | Required step size is less than spacing between numbers. |

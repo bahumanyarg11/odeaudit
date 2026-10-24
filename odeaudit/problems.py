@@ -436,18 +436,18 @@ def _e5(t, y, xp):
     )
 
 
-_add(
-    Problem(
-        "E5S",
-        _e5,
-        (1.76e-3, 0.0, 0.0, 0.0),
-        (0.0, 1e13),
-        True,
-        group="Hairer-stiff",
-        description="E5 (Enright-Hull), very stiff, tiny components, to t = 1e13",
-        checkpoints=(1e3, 1e7, 1e10),
-        scale=1e-3,
-    )
+# E5 (Enright-Hull) is defined above but not registered: its components fall to 1e-30 and no SciPy integrator
+# delivers a reference at rtol 1e-12 for it (Radau underflows its step size). Register it yourself if you have one.
+E5_PROBLEM = Problem(
+    "E5S",
+    _e5,
+    (1.76e-3, 0.0, 0.0, 0.0),
+    (0.0, 1e13),
+    True,
+    group="Hairer-stiff",
+    description="E5 (Enright-Hull), very stiff, tiny components, to t = 1e13",
+    checkpoints=(1e3, 1e7, 1e10),
+    scale=1e-3,
 )
 
 
